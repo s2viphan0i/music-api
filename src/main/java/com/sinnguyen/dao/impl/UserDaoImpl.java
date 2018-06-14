@@ -1,43 +1,69 @@
 package com.sinnguyen.dao.impl;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.sinnguyen.dao.UserDao;
 import com.sinnguyen.entities.User;
+import com.sinnguyen.model.ResponseModel;
 import com.sinnguyen.model.SearchDTO;
+import com.sinnguyen.model.UserMapper;
+import com.sinnguyen.util.MainUtility;
 
-public class UserDaoImpl implements UserDao{
+public class UserDaoImpl implements UserDao {
 
 	@Autowired
-	private SessionFactory sessionFactory;
-	
-	public void add(User user) {
-		sessionFactory.getCurrentSession().persist(user);
-	}
+	private JdbcTemplate jdbcTemplate;
 
-	public void edit(User user) {
-		sessionFactory.getCurrentSession().merge(user);
-	}
-
-	public void delete(User user) {
-		sessionFactory.getCurrentSession().delete(user);
-	}
-
-	public User getById(int id) {
-		return (User) sessionFactory.getCurrentSession().get(User.class, id);
-	}
-
-	public List<User> search(SearchDTO searchDTO) {
-		Criteria cr = sessionFactory.getCurrentSession().createCriteria(User.class);
-		if(searchDTO.getKeyword()!=null) {
-			cr.add(Restrictions.ilike("name", searchDTO.getKeyword()));
+	public ResponseModel add(User user) {
+		String sqlCheckExist;
+		ResponseModel result = new ResponseModel();
+		try {
+			sqlCheckExist = "SELECT EXISTS (SELECT 1 FROM user WHERE username = " + user.getId() + ")";
+			if (this.jdbcTemplate.queryForObject(sqlCheckExist, Integer.class) == 1) {
+				result.setSuccess(false);
+				result.setMsg("Tên đăng nhập đã tồn tại! Vui lòng nhập lại");
+				return result;
+			}
+			String sql = "INSERT INTO user (username, password, fullname, birthdate, email, phone, note) VALUES (?,?,?,?,?,?,?,?,?)";
+			Object[] newObj = new Object[] { user.getUsername(), MainUtility.MD5(user.getPassword()),
+					user.getFullname(), MainUtility.dateToStringFormat(user.getBirthdate(), "yyyy-MM-dd HH:mm:ss"),
+					user.getEmail(), user.getPhone(), user.getNote() };
+			int row = this.jdbcTemplate.update(sql, newObj);
+			result.setSuccess(true);
+			result.setMsg("Đăng ký thành công");
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg("Có lỗi xảy ra! Vui lòng thử lại sau");
 		}
-		return cr.list();
+		return result;
+	}
+
+	public ResponseModel edit(User user) {
+		return null;
+	}
+
+	public ResponseModel delete(User user) {
+		return null;
+	}
+
+	public ResponseModel getById(int id) {
+		String sql = "SELECT * FROM user WHERE id = ?";
+		ResponseModel result = new ResponseModel();
+		try {
+			User user = this.jdbcTemplate.queryForObject(sql, new Object[] { id }, new UserMapper());
+			result.setSuccess(true);
+			result.setMsg("Lấy thông tin người dùng thành công");
+			result.setContent(user);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg("Lấy thông tin người dùng thất bại");
+		}
+		return result;
+	}
+
+	public ResponseModel search(SearchDTO searchDTO) {
+		return null;
 	}
 
 }
