@@ -43,11 +43,38 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	public ResponseModel edit(User user) {
-		return null;
+		ResponseModel result = new ResponseModel();
+		try {
+			String sql = "UPDATE user SET fullname = ?, birthdate = ?, email = ?, phone = ?, note = ?"
+					+ " WHERE id = ?";
+			Object[] newObj = new Object[] {user.getFullname(), 
+					MainUtility.dateToStringFormat(user.getBirthdate(), "yyyy-MM-dd HH:mm:ss"), 
+					user.getEmail(), user.getPhone(), user.getNote(), user.getId() };
+			int row = this.jdbcTemplate.update(sql, newObj);
+			result.setSuccess(true);
+			result.setMsg("Cập nhật thông tin thành công");
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg("Có lỗi xảy ra! Vui lòng thử lại sau");
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	public ResponseModel delete(User user) {
-		return null;
+		ResponseModel result = new ResponseModel();
+		try {
+			String sql = "DELETE FROM user WHERE id = ?";
+			Object[] newObj = new Object[] {user.getId() };
+			int row = this.jdbcTemplate.update(sql, newObj);
+			result.setSuccess(true);
+			result.setMsg("Xóa người dùng thành công");
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg("Có lỗi xảy ra! Vui lòng thử lại sau");
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	public ResponseModel getById(int id) {

@@ -25,6 +25,11 @@ public class UserController {
         return userService.delete(user);
     }
 	
+	@RequestMapping(value="/edit", method = RequestMethod.PUT)
+	public ResponseModel editUser(@RequestBody User user) {
+		return userService.edit(user);
+	}
+	
 	@RequestMapping(value="/add", method = RequestMethod.POST)
 	public ResponseModel addUser(@RequestBody User user) {
 		return userService.add(user);
