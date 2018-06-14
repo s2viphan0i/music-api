@@ -1,0 +1,13 @@
+com\sinnguyen\model\UserMapper.class
+com\sinnguyen\service\UserService.class
+com\sinnguyen\config\MusicAPIConfiguration.class
+com\sinnguyen\dao\UserDao.class
+com\sinnguyen\dao\impl\UserDaoImpl.class
+com\sinnguyen\controller\UserController.class
+com\sinnguyen\util\MainUtility.class
+com\sinnguyen\config\WebInit.class
+com\sinnguyen\model\SearchDTO.class
+com\sinnguyen\entities\User.class
+com\sinnguyen\model\ResponseModel.class
+com\sinnguyen\model\UserDTO.class
+com\sinnguyen\service\impl\UserServiceImpl.class

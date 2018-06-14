@@ -3,6 +3,8 @@ package com.sinnguyen.entities;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class User implements Serializable {
 	/**
 	 * 
@@ -15,6 +17,7 @@ public class User implements Serializable {
 	private String fullname;
 	private String email;
 	private String phone;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Asia/Ho_Chi_Minh")
 	private Date birthdate;
 	private String note;
 

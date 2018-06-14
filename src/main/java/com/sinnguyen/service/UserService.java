@@ -2,7 +2,6 @@ package com.sinnguyen.service;
 
 import com.sinnguyen.entities.User;
 import com.sinnguyen.model.ResponseModel;
-import com.sinnguyen.model.UserDTO;
 
 public interface UserService {
 	ResponseModel add(User user);

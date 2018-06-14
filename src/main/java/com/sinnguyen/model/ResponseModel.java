@@ -1,6 +1,8 @@
 package com.sinnguyen.model;
 
-public class ResponseModel {
+import java.io.Serializable;
+
+public class ResponseModel implements Serializable {
 	private boolean success;
 	private String msg;
 	private Object content;
