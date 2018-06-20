@@ -22,7 +22,6 @@ public class User implements Serializable {
 	private String email;
 	private String phone;
 	@JsonIgnore
-	private String token;
 	private boolean isActivated;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Asia/Ho_Chi_Minh")
 	private Date birthdate;
@@ -32,14 +31,13 @@ public class User implements Serializable {
 		super();
 	}
 
-	public User(int id, String username, String password, String fullname, String email, String token, String phone, Date birthdate,
+	public User(int id, String username, String password, String fullname, String email, String phone, Date birthdate,
 			boolean isActivated, String note) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.fullname = fullname;
-		this.token = token;
 		this.email = email;
 		this.phone = phone;
 		this.birthdate = birthdate;
@@ -109,14 +107,6 @@ public class User implements Serializable {
 
 	public void setNote(String note) {
 		this.note = note;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
 	}
 
 	public boolean isActivated() {

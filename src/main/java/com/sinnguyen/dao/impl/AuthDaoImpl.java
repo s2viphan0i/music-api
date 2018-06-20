@@ -38,14 +38,15 @@ public class AuthDaoImpl implements AuthDao {
 
 	public boolean register(User user) {
 		try {
-			String sql = "INSERT INTO user (username, password, fullname, birthdate, email, phone, activated, note) VALUES (?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO user (username, password, fullname, birthdate, email, phone, activated, note) VALUES (?,?,?,?,?,?,?,?)";
 			Object[] newObj = new Object[] { user.getUsername(), MainUtility.MD5(user.getPassword()),
 					user.getFullname(), MainUtility.dateToStringFormat(user.getBirthdate(), "yyyy-MM-dd HH:mm:ss"),
-					user.getEmail(), user.getPhone(), 0, user.getNote() };
+					user.getEmail(), user.getPhone(), false, user.getNote() };
 			int row = this.jdbcTemplate.update(sql, newObj);
 
 			return true;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			return false;
 		}
 	}

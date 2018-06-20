@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sinnguyen.entities.User;
 import com.sinnguyen.model.ResponseModel;
+import com.sinnguyen.model.UserDTO;
 import com.sinnguyen.service.AuthService;
-
-import redis.clients.jedis.Response;
 
 @RestController
 @RequestMapping("/")
@@ -26,12 +24,12 @@ public class AuthController {
 	private AuthService authService;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ResponseEntity login(@RequestBody User user) {
+	public ResponseEntity login(@RequestBody UserDTO user) {
 		String Authorization = "";
 		try {
 			ResponseModel result = authService.login(user);
 			if (result.isSuccess()) {
-				Authorization = "Bearer " + ((User) result.getContent()).getToken();
+				Authorization = "Bearer " + ((UserDTO) result.getContent()).getToken();
 			}
 			HttpHeaders headers = new HttpHeaders();
 			ObjectMapper mapper = new ObjectMapper();
@@ -49,7 +47,7 @@ public class AuthController {
 	}
 	
 	@RequestMapping(value="/register", method = RequestMethod.POST)
-	public ResponseModel register(@RequestBody User user) {
+	public ResponseModel register(@RequestBody UserDTO user) {
 		return authService.register(user);
 	}
 }

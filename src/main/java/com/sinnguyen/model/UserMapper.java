@@ -7,9 +7,9 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.sinnguyen.entities.User;
 
-public class UserMapper implements RowMapper {
+public class UserMapper implements RowMapper<User> {
 
-	public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 		User user = new User();
 		user.setId(rs.getInt("id"));
 		user.setUsername(rs.getString("username"));
@@ -18,6 +18,7 @@ public class UserMapper implements RowMapper {
 		user.setFullname(rs.getString("fullname"));
 		user.setPhone(rs.getString("phone"));
 		user.setBirthdate(rs.getDate("birthdate"));
+		user.setActivated(rs.getBoolean("activated"));
 		user.setNote(rs.getString("note"));
 		return user;
 	}

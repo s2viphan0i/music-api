@@ -1,10 +1,10 @@
 package com.sinnguyen.service;
 
-import com.sinnguyen.entities.User;
 import com.sinnguyen.model.ResponseModel;
+import com.sinnguyen.model.UserDTO;
 
 public interface AuthService {
-	ResponseModel login(User user);
+	ResponseModel login(UserDTO user);
 	ResponseModel logout(String token);
-	ResponseModel register(User user);
+	ResponseModel register(UserDTO user);
 }
