@@ -37,7 +37,6 @@ public class UserDaoImpl implements UserDao {
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg("Có lỗi xảy ra! Vui lòng thử lại sau");
-			e.printStackTrace();
 		}
 		return result;
 	}
@@ -56,7 +55,6 @@ public class UserDaoImpl implements UserDao {
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg("Có lỗi xảy ra! Vui lòng thử lại sau");
-			e.printStackTrace();
 		}
 		return result;
 	}
@@ -72,7 +70,6 @@ public class UserDaoImpl implements UserDao {
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg("Có lỗi xảy ra! Vui lòng thử lại sau");
-			e.printStackTrace();
 		}
 		return result;
 	}
@@ -86,7 +83,6 @@ public class UserDaoImpl implements UserDao {
 			result.setSuccess(true);
 			result.setMsg("Lấy thông tin người dùng thành công");
 			result.setContent(user);
-			System.out.println(user.getBirthdate());
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg("Lấy thông tin người dùng thất bại");

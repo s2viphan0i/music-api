@@ -3,6 +3,7 @@ package com.sinnguyen.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +16,10 @@ import com.sinnguyen.service.UserService;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends VerifyToken {
+	
+	public UserController() {
+	}
 	
 	@Autowired
 	private UserService userService;
@@ -36,7 +40,9 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
-	public ResponseModel getUser(@PathVariable("id") int id) {
+	public ResponseModel getUser(@RequestHeader("Authorization") String token, @PathVariable("id") int id) {
+		if(!this.checkToken(token))
+			return this.notFoundUser();
 		return userService.getById(id);
 	}
 }
