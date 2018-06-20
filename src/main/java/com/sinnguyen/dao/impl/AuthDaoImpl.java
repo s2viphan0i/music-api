@@ -1,9 +1,17 @@
 package com.sinnguyen.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import com.mysql.cj.api.jdbc.Statement;
 import com.sinnguyen.dao.AuthDao;
 import com.sinnguyen.entities.User;
 import com.sinnguyen.model.UserMapper;
@@ -36,14 +44,30 @@ public class AuthDaoImpl implements AuthDao {
 		return true;
 	}
 
-	public boolean register(User user) {
+	public boolean register(final User user) {
 		try {
-			String sql = "INSERT INTO user (username, password, fullname, birthdate, email, phone, activated, note) VALUES (?,?,?,?,?,?,?,?)";
+			final String sql = "INSERT INTO user (username, password, fullname, birthdate, email, phone, activated, note) VALUES (?,?,?,?,?,?,?,?)";
 			Object[] newObj = new Object[] { user.getUsername(), MainUtility.MD5(user.getPassword()),
 					user.getFullname(), MainUtility.dateToStringFormat(user.getBirthdate(), "yyyy-MM-dd HH:mm:ss"),
 					user.getEmail(), user.getPhone(), false, user.getNote() };
-			int row = this.jdbcTemplate.update(sql, newObj);
+			KeyHolder holder = new GeneratedKeyHolder();
+			int row = this.jdbcTemplate.update(new PreparedStatementCreator() {
 
+				public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+					PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+					ps.setString(1, user.getUsername());
+					ps.setString(2, MainUtility.MD5(user.getPassword()));
+					ps.setString(3, user.getFullname());
+					ps.setString(4, MainUtility.dateToStringFormat(user.getBirthdate(), "yyyy-MM-dd HH:mm:ss"));
+					ps.setString(5, user.getEmail());
+					ps.setString(6, user.getPhone());
+					ps.setBoolean(7, false);
+					ps.setString(8, user.getNote());
+					
+					return ps;
+				}
+			}, holder);
+			user.setId(holder.getKey().intValue());
 			return true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
