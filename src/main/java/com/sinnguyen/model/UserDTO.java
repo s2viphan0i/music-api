@@ -24,6 +24,7 @@ public class UserDTO  implements Serializable {
 	@JsonIgnore
 	private String token;
 	private boolean isActivated;
+	private String code;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Asia/Ho_Chi_Minh")
 	private Date birthdate;
 	private String note;
@@ -33,7 +34,7 @@ public class UserDTO  implements Serializable {
 	}
 
 	public UserDTO(int id, String username, String password, String fullname, String email, String token, String phone, Date birthdate,
-			boolean isActivated, String note) {
+			String code, boolean isActivated, String note) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -44,6 +45,7 @@ public class UserDTO  implements Serializable {
 		this.phone = phone;
 		this.birthdate = birthdate;
 		this.isActivated = isActivated;
+		this.code = code;
 		this.note = note;
 	}
 
@@ -125,6 +127,14 @@ public class UserDTO  implements Serializable {
 
 	public void setActivated(boolean isActivated) {
 		this.isActivated = isActivated;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }

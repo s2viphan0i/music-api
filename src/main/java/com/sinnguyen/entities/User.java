@@ -16,14 +16,12 @@ public class User implements Serializable {
 
 	private int id;
 	private String username;
-	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 	private String fullname;
 	private String email;
 	private String phone;
-	@JsonIgnore
 	private boolean isActivated;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Asia/Ho_Chi_Minh")
+	private String code;
 	private Date birthdate;
 	private String note;
 
@@ -32,7 +30,7 @@ public class User implements Serializable {
 	}
 
 	public User(int id, String username, String password, String fullname, String email, String phone, Date birthdate,
-			boolean isActivated, String note) {
+			boolean isActivated, String code, String note) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -42,6 +40,7 @@ public class User implements Serializable {
 		this.phone = phone;
 		this.birthdate = birthdate;
 		this.isActivated = isActivated;
+		this.code = code;
 		this.note = note;
 	}
 
@@ -115,6 +114,14 @@ public class User implements Serializable {
 
 	public void setActivated(boolean isActivated) {
 		this.isActivated = isActivated;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }

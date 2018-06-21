@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sinnguyen.model.ResponseModel;
 import com.sinnguyen.model.UserDTO;
 import com.sinnguyen.service.AuthService;
+import com.sinnguyen.service.MailService;
 
 @RestController
 @RequestMapping("/")
@@ -22,6 +23,9 @@ public class AuthController {
 
 	@Autowired
 	private AuthService authService;
+	
+	@Autowired
+	private MailService mailService;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity login(@RequestBody UserDTO user) {
@@ -48,6 +52,10 @@ public class AuthController {
 	
 	@RequestMapping(value="/register", method = RequestMethod.POST)
 	public ResponseModel register(@RequestBody UserDTO user) {
-		return authService.register(user);
+		ResponseModel result = authService.register(user);
+		if(result.isSuccess()) {
+			mailService.sendWelcomeMail((UserDTO)result.getContent());
+		}
+		return result;
 	}
 }

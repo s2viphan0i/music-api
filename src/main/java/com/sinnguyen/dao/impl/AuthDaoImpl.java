@@ -37,7 +37,8 @@ public class AuthDaoImpl implements AuthDao {
 	}
 
 	public boolean checkUsername(User user) {
-		String sql = "SELECT EXISTS (SELECT 1 FROM user WHERE username = '" + user.getUsername() + "' OR email = '" + user.getEmail() + "')";
+		String sql = "SELECT EXISTS (SELECT 1 FROM user WHERE username = '" + user.getUsername() + "' OR email = '"
+				+ user.getEmail() + "')";
 		if (this.jdbcTemplate.queryForObject(sql, Integer.class) == 1) {
 			return false;
 		}
@@ -63,14 +64,26 @@ public class AuthDaoImpl implements AuthDao {
 					ps.setString(6, user.getPhone());
 					ps.setBoolean(7, false);
 					ps.setString(8, user.getNote());
-					
+
 					return ps;
 				}
 			}, holder);
 			user.setId(holder.getKey().intValue());
 			return true;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean insertActivation(User user) {
+		try {
+			String sql = "UPDATE user SET code = ? WHERE id = ?";
+			String code = user.getId() + System.currentTimeMillis() + "";
+			Object[] newObj = new Object[] { code, user.getId() };
+			int row = this.jdbcTemplate.update(sql, newObj);
+			user.setCode(code);
+			return true;
+		} catch (Exception ex) {
 			return false;
 		}
 	}

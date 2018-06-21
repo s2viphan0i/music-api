@@ -104,8 +104,9 @@ public class AuthServiceImpl implements AuthService {
 			u.setActivated(user.isActivated());
 			u.setNote(user.getNote());
 			if (authDao.checkUsername(u)) {
-				if (authDao.register(u)) {
+				if (authDao.register(u)&&authDao.insertActivation(u)) {
 					user.setId(u.getId());
+					user.setCode(u.getCode());
 					result.setSuccess(true);
 					result.setMsg("Đăng kí thành công");
 					result.setContent(user);
