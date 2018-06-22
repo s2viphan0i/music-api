@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -57,5 +58,10 @@ public class AuthController {
 			mailService.sendWelcomeMail((UserDTO)result.getContent());
 		}
 		return result;
+	}
+	
+	@RequestMapping(value="/activate", method = RequestMethod.GET)
+	public ResponseModel activate(@RequestParam String code) {
+		return authService.activate(code);
 	}
 }

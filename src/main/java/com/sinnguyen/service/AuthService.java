@@ -7,4 +7,5 @@ public interface AuthService {
 	ResponseModel login(UserDTO user);
 	ResponseModel logout(String token);
 	ResponseModel register(UserDTO user);
+	ResponseModel activate(String code);
 }

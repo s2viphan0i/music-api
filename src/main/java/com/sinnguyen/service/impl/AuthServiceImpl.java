@@ -121,5 +121,17 @@ public class AuthServiceImpl implements AuthService {
 		}
 		return result;
 	}
+	
+	public ResponseModel activate(String code) {
+		ResponseModel result = new ResponseModel();
+		if(authDao.activate(code)) {
+			result.setSuccess(true);
+			result.setMsg("Kích hoạt tài khoản thành công! Vui lòng đăng nhập");
+		}else {
+			result.setSuccess(false);
+			result.setMsg("Có lỗi xảy ra vui lòng thử lại");
+		}
+		return result;
+	}
 
 }

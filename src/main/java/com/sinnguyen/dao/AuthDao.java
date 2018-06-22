@@ -7,4 +7,5 @@ public interface AuthDao {
 	boolean checkUsername(User user);
 	boolean register(User user);
 	boolean insertActivation(User user);
+	boolean activate(String code);
 }

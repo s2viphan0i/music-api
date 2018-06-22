@@ -77,15 +77,28 @@ public class AuthDaoImpl implements AuthDao {
 
 	public boolean insertActivation(User user) {
 		try {
-			String sql = "UPDATE user SET code = ? WHERE id = ?";
+			String sql = "UPDATE user SET code = ? WHERE id = ? AND activated = ?";
 			String code = user.getId() + System.currentTimeMillis() + "";
-			Object[] newObj = new Object[] { code, user.getId() };
+			Object[] newObj = new Object[] { code, user.getId(), false};
 			int row = this.jdbcTemplate.update(sql, newObj);
 			user.setCode(code);
 			return true;
 		} catch (Exception ex) {
 			return false;
 		}
+	}
+
+	public boolean activate(String code) {
+		try {
+			String sql = "UPDATE user SET activated = ? WHERE code = ?";
+			Object[] newObj = new Object[] { true, code};
+			int row = this.jdbcTemplate.update(sql, newObj);
+			if(row>0) {
+				return true;
+			}
+		} catch (Exception ex) {
+		}
+		return false;
 	}
 
 }
