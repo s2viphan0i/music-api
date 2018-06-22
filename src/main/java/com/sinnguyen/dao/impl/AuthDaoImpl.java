@@ -3,6 +3,7 @@ package com.sinnguyen.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mysql.cj.api.jdbc.Statement;
 import com.sinnguyen.dao.AuthDao;
+import com.sinnguyen.entities.Forgot;
 import com.sinnguyen.entities.User;
 import com.sinnguyen.model.UserMapper;
 import com.sinnguyen.util.MainUtility;
@@ -97,6 +99,26 @@ public class AuthDaoImpl implements AuthDao {
 				return true;
 			}
 		} catch (Exception ex) {
+		}
+		return false;
+	}
+	
+	public boolean insertForgot(User user) {
+		try {
+			String sql = "INSERT INTO forgot (user_id, code, timestamp) VALUES (?,?,?)";
+			String timestamp = System.currentTimeMillis() + "";
+			String code = UUID.randomUUID().toString().substring(0, 5);
+			Object[] newObj = new Object[] { user.getId(), code, timestamp};
+			int row = this.jdbcTemplate.update(sql, newObj);
+			if(row>0) {
+				Forgot forgot = new Forgot();
+				forgot.setCode(code);
+				forgot.setTimestamp(timestamp);
+				user.setForgot(forgot);
+				return true;
+			}
+		} catch (Exception ex) {
+			
 		}
 		return false;
 	}

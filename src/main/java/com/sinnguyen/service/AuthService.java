@@ -8,4 +8,5 @@ public interface AuthService {
 	ResponseModel logout(String token);
 	ResponseModel register(UserDTO user);
 	ResponseModel activate(String code);
+	ResponseModel forgot(UserDTO user);
 }

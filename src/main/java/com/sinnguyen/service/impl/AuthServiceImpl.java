@@ -9,7 +9,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sinnguyen.dao.AuthDao;
+import com.sinnguyen.dao.UserDao;
 import com.sinnguyen.entities.User;
+import com.sinnguyen.model.ForgotDTO;
 import com.sinnguyen.model.ResponseModel;
 import com.sinnguyen.model.UserDTO;
 import com.sinnguyen.service.AuthService;
@@ -21,6 +23,8 @@ public class AuthServiceImpl implements AuthService {
 
 	@Autowired
 	private AuthDao authDao;
+	@Autowired
+	private UserDao userDao;
 
 	public ResponseModel login(UserDTO user) {
 		User u = new User();
@@ -130,6 +134,33 @@ public class AuthServiceImpl implements AuthService {
 		}else {
 			result.setSuccess(false);
 			result.setMsg("Có lỗi xảy ra vui lòng thử lại");
+		}
+		return result;
+	}
+	
+	public ResponseModel forgot(UserDTO u) {
+		ResponseModel result = new ResponseModel();
+		User user = userDao.getUserbyEmail(u.getEmail());
+		if(user!=null) {
+			if(authDao.insertForgot(user)) {
+				u.setUsername(user.getUsername());
+				u.setEmail(user.getEmail());
+				ForgotDTO f = new ForgotDTO();
+				f.setCode(user.getForgot().getCode());
+				f.setId(user.getForgot().getId());
+				f.setTimestamp(user.getForgot().getTimestamp());
+				u.setForgot(f);
+				result.setSuccess(true);
+				result.setMsg("Gửi mã PIN về email thành công");
+				result.setContent(u);
+			}else {
+				result.setSuccess(false);
+				result.setMsg("Có lỗi xảy ra vui lòng thử lại");
+			}
+		}
+		else {
+			result.setSuccess(false);
+			result.setMsg("Không tìm thấy người dùng với email "+u.getEmail());
 		}
 		return result;
 	}

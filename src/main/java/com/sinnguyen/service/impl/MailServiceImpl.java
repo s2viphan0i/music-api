@@ -37,7 +37,7 @@ public class MailServiceImpl implements MailService {
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("username", userDTO.getUsername());
 			model.put("code", userDTO.getCode());
-			mimeMessageHelper.setText(geContentFromTemplate(model), true);
+			mimeMessageHelper.setText(getWelcomeContentFromTemplate(model), true);
 
 			mailSender.send(mimeMessageHelper.getMimeMessage());
 		} catch (MessagingException e) {
@@ -45,10 +45,40 @@ public class MailServiceImpl implements MailService {
 		}
 	}
 	
-	public String geContentFromTemplate(Map<String, Object> model) {
+	public String getWelcomeContentFromTemplate(Map<String, Object> model) {
 		StringBuffer content = new StringBuffer();
 		try {
 			content.append(VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/mailtemplate/welcome.vm", model));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return content.toString();
+	}
+
+	public void sendForgotMail(UserDTO userDTO) {
+		MimeMessage mimeMessage = mailSender.createMimeMessage();
+		try {
+			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+			mimeMessageHelper.setSubject("BBMusic Registration");
+			mimeMessageHelper.setFrom("hakleader@gmail.com");
+			mimeMessageHelper.setTo(userDTO.getEmail());
+
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("username", userDTO.getUsername());
+			model.put("code", userDTO.getForgot().getCode());
+			mimeMessageHelper.setText(getForgotContentFromTemplate(model), true);
+
+			mailSender.send(mimeMessageHelper.getMimeMessage());
+		} catch (MessagingException e) {
+				
+		}
+	}
+	
+	public String getForgotContentFromTemplate(Map<String, Object> model) {
+		StringBuffer content = new StringBuffer();
+		try {
+			content.append(VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/mailtemplate/forgot.vm", model));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

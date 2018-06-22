@@ -10,4 +10,5 @@ public interface UserDao {
 	ResponseModel delete(User user);
 	ResponseModel getById(int id);
 	ResponseModel search(SearchDTO searchDTO);
+	User getUserbyEmail(String email);
 }

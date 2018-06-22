@@ -64,4 +64,15 @@ public class AuthController {
 	public ResponseModel activate(@RequestParam String code) {
 		return authService.activate(code);
 	}
+	
+	@RequestMapping(value="/forgot", method = RequestMethod.POST)
+	public ResponseModel forgot(@RequestBody UserDTO user) {
+		ResponseModel result =  authService.forgot(user);
+		if(result.isSuccess()) {
+			UserDTO u = (UserDTO)result.getContent();
+			mailService.sendForgotMail(u);
+		}
+		result.setContent(null);
+		return result;
+	}
 }
