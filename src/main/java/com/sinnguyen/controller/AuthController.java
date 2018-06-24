@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sinnguyen.model.ResponseModel;
 import com.sinnguyen.model.UserDTO;
 import com.sinnguyen.service.AuthService;
+import com.sinnguyen.service.MailService;
 
 @RestController
 @RequestMapping("/")
@@ -22,6 +24,9 @@ public class AuthController {
 
 	@Autowired
 	private AuthService authService;
+	
+	@Autowired
+	private MailService mailService;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity login(@RequestBody UserDTO user) {
@@ -48,6 +53,26 @@ public class AuthController {
 	
 	@RequestMapping(value="/register", method = RequestMethod.POST)
 	public ResponseModel register(@RequestBody UserDTO user) {
-		return authService.register(user);
+		ResponseModel result = authService.register(user);
+		if(result.isSuccess()) {
+			mailService.sendWelcomeMail((UserDTO)result.getContent());
+		}
+		return result;
+	}
+	
+	@RequestMapping(value="/activate", method = RequestMethod.GET)
+	public ResponseModel activate(@RequestParam String code) {
+		return authService.activate(code);
+	}
+	
+	@RequestMapping(value="/forgot", method = RequestMethod.POST)
+	public ResponseModel forgot(@RequestBody UserDTO user) {
+		ResponseModel result =  authService.forgot(user);
+		if(result.isSuccess()) {
+			UserDTO u = (UserDTO)result.getContent();
+			mailService.sendForgotMail(u);
+		}
+		result.setContent(null);
+		return result;
 	}
 }

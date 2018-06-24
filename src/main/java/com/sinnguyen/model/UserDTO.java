@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-public class UserDTO  implements Serializable {
+public class UserDTO implements Serializable {
 	/**
 	 * 
 	 */
@@ -24,16 +24,19 @@ public class UserDTO  implements Serializable {
 	@JsonIgnore
 	private String token;
 	private boolean isActivated;
+	private String code;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Asia/Ho_Chi_Minh")
 	private Date birthdate;
 	private String note;
+	@JsonIgnore
+	private ForgotDTO forgot;
 
 	public UserDTO() {
 		super();
 	}
 
-	public UserDTO(int id, String username, String password, String fullname, String email, String token, String phone, Date birthdate,
-			boolean isActivated, String note) {
+	public UserDTO(int id, String username, String password, String fullname, String email, String token, String phone,
+			Date birthdate, String code, boolean isActivated, String note, ForgotDTO forgot) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -44,7 +47,17 @@ public class UserDTO  implements Serializable {
 		this.phone = phone;
 		this.birthdate = birthdate;
 		this.isActivated = isActivated;
+		this.code = code;
 		this.note = note;
+		this.forgot = forgot;
+	}
+
+	public ForgotDTO getForgot() {
+		return forgot;
+	}
+
+	public void setForgot(ForgotDTO forgot) {
+		this.forgot = forgot;
 	}
 
 	public int getId() {
@@ -125,6 +138,14 @@ public class UserDTO  implements Serializable {
 
 	public void setActivated(boolean isActivated) {
 		this.isActivated = isActivated;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }

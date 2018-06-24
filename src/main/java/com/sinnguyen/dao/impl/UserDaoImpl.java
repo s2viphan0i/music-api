@@ -94,4 +94,14 @@ public class UserDaoImpl implements UserDao {
 		return null;
 	}
 
+	public User getUserbyEmail(String email) {
+		String sql = "SELECT * FROM user WHERE email = ?";
+		try {
+			Object queryForObject = this.jdbcTemplate.queryForObject(sql, new Object[] { email }, new UserMapper());
+			return (User)queryForObject;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 }
