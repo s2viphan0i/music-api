@@ -13,6 +13,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
+import com.sinnguyen.model.ForgotDTO;
 import com.sinnguyen.model.UserDTO;
 import com.sinnguyen.service.MailService;
 
@@ -55,18 +56,18 @@ public class MailServiceImpl implements MailService {
 		return content.toString();
 	}
 
-	public void sendForgotMail(UserDTO userDTO) {
+	public void sendForgotMail(ForgotDTO forgot) {
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		try {
 			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
 			mimeMessageHelper.setSubject("BBMusic Registration");
 			mimeMessageHelper.setFrom("hakleader@gmail.com");
-			mimeMessageHelper.setTo(userDTO.getEmail());
+			mimeMessageHelper.setTo(forgot.getUser().getEmail());
 
 			Map<String, Object> model = new HashMap<String, Object>();
-			model.put("username", userDTO.getUsername());
-			model.put("code", userDTO.getForgot().getCode());
+			model.put("username", forgot.getUser().getUsername());
+			model.put("code", forgot.getCode());
 			mimeMessageHelper.setText(getForgotContentFromTemplate(model), true);
 
 			mailSender.send(mimeMessageHelper.getMimeMessage());

@@ -7,7 +7,6 @@ import javax.sql.DataSource;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.VelocityException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,7 +16,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.ui.velocity.VelocityEngineFactory;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -54,7 +52,7 @@ public class MusicAPIConfiguration extends WebMvcConfigurerAdapter {
 		javaMailProperties.put("mail.smtp.starttls.enable", "true");
 		javaMailProperties.put("mail.smtp.auth", "true");
 		javaMailProperties.put("mail.transport.protocol", "smtp");
-		javaMailProperties.put("mail.debug", "true");
+		javaMailProperties.put("mail.debug", "false");
 
 		mailSender.setJavaMailProperties(javaMailProperties);
 		return mailSender;
@@ -69,19 +67,6 @@ public class MusicAPIConfiguration extends WebMvcConfigurerAdapter {
 
 		velocityEngineFactory.setVelocityProperties(props);
 		return velocityEngineFactory.createVelocityEngine();
-	}
-	
-	@Bean
-	@Autowired
-	public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
-		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-		sessionFactory.setDataSource(dataSource);
-		sessionFactory.setPackagesToScan("com.sinnguyen.entity");
-		Properties properties = new Properties();
-		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-		properties.setProperty("hibernate.show_sql", "true");
-		sessionFactory.setHibernateProperties(properties);
-		return sessionFactory;
 	}
 	
 	@Bean

@@ -16,7 +16,7 @@ import com.sinnguyen.service.UserService;
 
 @RestController
 @RequestMapping("/user")
-public class UserController extends VerifyToken {
+public class UserController{
 	
 	public UserController() {
 	}
@@ -34,15 +34,8 @@ public class UserController extends VerifyToken {
 		return userService.edit(user);
 	}
 	
-	@RequestMapping(value="/add", method = RequestMethod.POST)
-	public ResponseModel addUser(@RequestBody User user) {
-		return userService.add(user);
-	}
-	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
-	public ResponseModel getUser(@RequestHeader("Authorization") String token, @PathVariable("id") int id) {
-		if(!this.checkToken(token))
-			return this.notFoundUser();
+	public ResponseModel getUser(@PathVariable("id") int id) {
 		return userService.getById(id);
 	}
 }

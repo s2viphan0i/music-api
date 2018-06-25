@@ -1,14 +1,18 @@
 package com.sinnguyen.dao;
 
 import com.sinnguyen.entities.User;
-import com.sinnguyen.model.ResponseModel;
 import com.sinnguyen.model.SearchDTO;
 
 public interface UserDao {
-	ResponseModel add(User user);
-	ResponseModel edit(User user);
-	ResponseModel delete(User user);
-	ResponseModel getById(int id);
-	ResponseModel search(SearchDTO searchDTO);
+	boolean add(User user);
+	boolean checkUsername(User user);
+	boolean edit(User user);
+	boolean delete(User user);
+	boolean getById(int id);
+	boolean search(SearchDTO searchDTO);
+	boolean insertActivation(User user);
+	boolean activate(String code);
 	User getUserbyEmail(String email);
+	User getUserbyUsername(String username);
+	boolean changePassword(User user);
 }

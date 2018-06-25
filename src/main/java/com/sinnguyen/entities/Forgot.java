@@ -10,16 +10,10 @@ public class Forgot implements Serializable {
 	private int id;
 	private String code;
 	private String timestamp;
+	private User user;
 
 	public Forgot() {
 		super();
-	}
-
-	public Forgot(int id, String code, String timestamp) {
-		super();
-		this.id = id;
-		this.code = code;
-		this.timestamp = timestamp;
 	}
 
 	public int getId() {
@@ -44,6 +38,14 @@ public class Forgot implements Serializable {
 
 	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

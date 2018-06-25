@@ -24,26 +24,9 @@ public class User implements Serializable {
 	private String code;
 	private Date birthdate;
 	private String note;
-	private Forgot forgot;
 
 	public User() {
 		super();
-	}
-
-	public User(int id, String username, String password, String fullname, String email, String phone, Date birthdate,
-			boolean isActivated, String code, String note, Forgot forgot) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.fullname = fullname;
-		this.email = email;
-		this.phone = phone;
-		this.birthdate = birthdate;
-		this.isActivated = isActivated;
-		this.code = code;
-		this.note = note;
-		this.forgot = forgot;
 	}
 
 	public int getId() {
@@ -124,14 +107,6 @@ public class User implements Serializable {
 
 	public void setCode(String code) {
 		this.code = code;
-	}
-
-	public Forgot getForgot() {
-		return forgot;
-	}
-
-	public void setForgot(Forgot forgot) {
-		this.forgot = forgot;
 	}
 
 }
