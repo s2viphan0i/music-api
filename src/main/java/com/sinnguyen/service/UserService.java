@@ -6,8 +6,9 @@ import com.sinnguyen.model.UserDTO;
 
 public interface UserService {
 	ResponseModel add(UserDTO user);
-	ResponseModel edit(User user);
+	ResponseModel edit(UserDTO user);
 	ResponseModel delete(User user);
+	ResponseModel getAllUser();
 	ResponseModel getById(int id);
 	ResponseModel getByUsername(String username);
 	ResponseModel activate(String code);

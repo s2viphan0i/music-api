@@ -1,17 +1,17 @@
 package com.sinnguyen.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sinnguyen.entities.User;
 import com.sinnguyen.model.ResponseModel;
+import com.sinnguyen.model.UserDTO;
 import com.sinnguyen.service.UserService;
 
 @RestController
@@ -30,7 +30,10 @@ public class UserController{
     }
 	
 	@RequestMapping(value="/edit", method = RequestMethod.PUT)
-	public ResponseModel editUser(@RequestBody User user) {
+	public ResponseModel editUser(@RequestBody UserDTO user) {
+		SecurityContext context = SecurityContextHolder.getContext();
+		String username = context.getAuthentication().getName();
+		user.setUsername(username);
 		return userService.edit(user);
 	}
 	

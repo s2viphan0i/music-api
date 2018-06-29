@@ -3,6 +3,7 @@ package com.sinnguyen.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -93,7 +94,15 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	public boolean edit(User user) {
-		// TODO
+		try {
+			String sql = "UPDATE user SET fullname = ?, birthdate = ?, phone = ?, note = ? WHERE username = ?";
+			Object[] newObj = new Object[] { user.getFullname(), user.getBirthdate(), user.getPhone(), user.getNote(), user.getUsername() };
+			int row = this.jdbcTemplate.update(sql, newObj);
+			if (row > 0) {
+				return true;
+			}
+		} catch (Exception ex) {
+		}
 		return false;
 	}
 
@@ -122,6 +131,16 @@ public class UserDaoImpl implements UserDao {
 		}
 	}
 
+	public List<User> getAllUser(){
+		String sql = "SELECT * FROM user WHERE activated = ?";
+		try {
+			List<User> users = this.jdbcTemplate.query(sql, new Object[] { true }, new UserMapper());
+			return users;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	public User getUserbyUsername(String username) {
 		String sql = "SELECT * FROM user WHERE username = ?";
 		try {
