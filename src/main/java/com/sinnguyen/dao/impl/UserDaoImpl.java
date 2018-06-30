@@ -3,6 +3,8 @@ package com.sinnguyen.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.SQLType;
+import java.sql.Types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +40,7 @@ public class UserDaoImpl implements UserDao {
 
 	public boolean add(final User user) {
 		try {
-			final String sql = "INSERT INTO user (username, password, fullname, birthdate, email, phone, activated, role, note) VALUES (?,?,?,?,?,?,?,?)";
+			final String sql = "INSERT INTO user (username, password, fullname, birthdate, email, phone, activated, role, note) VALUES (?,?,?,?,?,?,?,?,?)";
 			KeyHolder holder = new GeneratedKeyHolder();
 			int row = this.jdbcTemplate.update(new PreparedStatementCreator() {
 
@@ -47,9 +49,17 @@ public class UserDaoImpl implements UserDao {
 					ps.setString(1, user.getUsername());
 					ps.setString(2, PasswordGenerator.genPassword(user.getPassword()));
 					ps.setString(3, user.getFullname());
-					ps.setString(4, MainUtility.dateToStringFormat(user.getBirthdate(), "yyyy-MM-dd HH:mm:ss"));
+					if(user.getBirthdate()!=null) {
+						ps.setString(4, MainUtility.dateToStringFormat(user.getBirthdate(), "yyyy-MM-dd HH:mm:ss"));
+					}else {
+						ps.setNull(4, Types.DATE);
+					}
 					ps.setString(5, user.getEmail());
-					ps.setString(6, user.getPhone());
+					if(user.getPhone()!=null) {
+						ps.setString(6, user.getPhone());
+					} else {
+						ps.setNull(6, Types.VARCHAR);
+					}
 					ps.setBoolean(7, false);
 					ps.setString(8, "ROLE_USER");
 					ps.setString(9, user.getNote());
@@ -62,7 +72,7 @@ public class UserDaoImpl implements UserDao {
 				return true;
 			}
 		} catch (Exception ex) {
-
+			ex.printStackTrace();
 		}
 		return false;
 	}

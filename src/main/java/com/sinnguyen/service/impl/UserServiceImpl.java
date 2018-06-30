@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 					user.setId(u.getId());
 					user.setCode(u.getCode());
 					result.setSuccess(true);
-					result.setMsg("Đăng kí thành công");
+					result.setMsg("Đăng kí thành công, vui lòng kiểm tra mail để kích hoạt tài khoản");
 					result.setContent(user);
 				} else {
 					result.setSuccess(false);
@@ -105,7 +105,6 @@ public class UserServiceImpl implements UserService {
 		if (u != null) {
 			UserDTO user = Converter.userToUserDTO(u);
 			result.setSuccess(true);
-			result.setMsg("Đăng nhập thành công");
 			result.setContent(user);
 		} else {
 			result.setSuccess(false);
