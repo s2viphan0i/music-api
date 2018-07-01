@@ -40,7 +40,7 @@ public class UserDaoImpl implements UserDao {
 
 	public boolean add(final User user) {
 		try {
-			final String sql = "INSERT INTO user (username, password, fullname, birthdate, email, phone, activated, role, note) VALUES (?,?,?,?,?,?,?,?,?)";
+			final String sql = "INSERT INTO user (username, password, fullname, avatar, birthdate, email, phone, activated, role, note) VALUES (?,?,?,?,?,?,?,?,?,?)";
 			KeyHolder holder = new GeneratedKeyHolder();
 			int row = this.jdbcTemplate.update(new PreparedStatementCreator() {
 
@@ -49,20 +49,21 @@ public class UserDaoImpl implements UserDao {
 					ps.setString(1, user.getUsername());
 					ps.setString(2, PasswordGenerator.genPassword(user.getPassword()));
 					ps.setString(3, user.getFullname());
+					ps.setString(4, "default.png");
 					if(user.getBirthdate()!=null) {
-						ps.setString(4, MainUtility.dateToStringFormat(user.getBirthdate(), "yyyy-MM-dd HH:mm:ss"));
+						ps.setString(5, MainUtility.dateToStringFormat(user.getBirthdate(), "yyyy-MM-dd HH:mm:ss"));
 					}else {
-						ps.setNull(4, Types.DATE);
+						ps.setNull(5, Types.DATE);
 					}
-					ps.setString(5, user.getEmail());
+					ps.setString(6, user.getEmail());
 					if(user.getPhone()!=null) {
-						ps.setString(6, user.getPhone());
+						ps.setString(7, user.getPhone());
 					} else {
-						ps.setNull(6, Types.VARCHAR);
+						ps.setNull(7, Types.VARCHAR);
 					}
-					ps.setBoolean(7, false);
-					ps.setString(8, "ROLE_USER");
-					ps.setString(9, user.getNote());
+					ps.setBoolean(8, false);
+					ps.setString(9, "ROLE_USER");
+					ps.setString(10, user.getNote());
 
 					return ps;
 				}

@@ -18,6 +18,7 @@ public class User implements Serializable {
 	private String username;
 	private String password;
 	private String fullname;
+	private String avatar;
 	private String email;
 	private String phone;
 	private boolean isActivated;
@@ -107,6 +108,14 @@ public class User implements Serializable {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 }
