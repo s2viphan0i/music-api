@@ -13,6 +13,7 @@ public class Converter {
 		u.setPassword(user.getPassword());
 		u.setFullname(user.getFullname());
 		u.setBirthdate(user.getBirthdate());
+		u.setAvatar(user.getAvatar());
 		u.setEmail(user.getEmail());
 		u.setPhone(user.getPhone());
 		u.setCode(user.getCode());
@@ -28,6 +29,7 @@ public class Converter {
 		u.setPassword(user.getPassword());
 		u.setFullname(user.getFullname());
 		u.setBirthdate(user.getBirthdate());
+		u.setAvatar(user.getAvatar());
 		u.setEmail(user.getEmail());
 		u.setPhone(user.getPhone());
 		u.setCode(user.getCode());

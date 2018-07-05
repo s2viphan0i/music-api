@@ -3,6 +3,9 @@ package com.sinnguyen.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.SQLType;
+import java.sql.Types;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -37,7 +40,7 @@ public class UserDaoImpl implements UserDao {
 
 	public boolean add(final User user) {
 		try {
-			final String sql = "INSERT INTO user (username, password, fullname, birthdate, email, phone, activated, role, note) VALUES (?,?,?,?,?,?,?,?)";
+			final String sql = "INSERT INTO user (username, password, fullname, avatar, birthdate, email, phone, activated, role, note) VALUES (?,?,?,?,?,?,?,?,?,?)";
 			KeyHolder holder = new GeneratedKeyHolder();
 			int row = this.jdbcTemplate.update(new PreparedStatementCreator() {
 
@@ -46,12 +49,21 @@ public class UserDaoImpl implements UserDao {
 					ps.setString(1, user.getUsername());
 					ps.setString(2, PasswordGenerator.genPassword(user.getPassword()));
 					ps.setString(3, user.getFullname());
-					ps.setString(4, MainUtility.dateToStringFormat(user.getBirthdate(), "yyyy-MM-dd HH:mm:ss"));
-					ps.setString(5, user.getEmail());
-					ps.setString(6, user.getPhone());
-					ps.setBoolean(7, false);
-					ps.setString(8, "ROLE_USER");
-					ps.setString(9, user.getNote());
+					ps.setString(4, "default.png");
+					if(user.getBirthdate()!=null) {
+						ps.setString(5, MainUtility.dateToStringFormat(user.getBirthdate(), "yyyy-MM-dd HH:mm:ss"));
+					}else {
+						ps.setNull(5, Types.DATE);
+					}
+					ps.setString(6, user.getEmail());
+					if(user.getPhone()!=null) {
+						ps.setString(7, user.getPhone());
+					} else {
+						ps.setNull(7, Types.VARCHAR);
+					}
+					ps.setBoolean(8, false);
+					ps.setString(9, "ROLE_USER");
+					ps.setString(10, user.getNote());
 
 					return ps;
 				}
@@ -61,7 +73,7 @@ public class UserDaoImpl implements UserDao {
 				return true;
 			}
 		} catch (Exception ex) {
-
+			ex.printStackTrace();
 		}
 		return false;
 	}
@@ -93,7 +105,15 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	public boolean edit(User user) {
-		// TODO
+		try {
+			String sql = "UPDATE user SET fullname = ?, birthdate = ?, phone = ?, note = ? WHERE username = ?";
+			Object[] newObj = new Object[] { user.getFullname(), user.getBirthdate(), user.getPhone(), user.getNote(), user.getUsername() };
+			int row = this.jdbcTemplate.update(sql, newObj);
+			if (row > 0) {
+				return true;
+			}
+		} catch (Exception ex) {
+		}
 		return false;
 	}
 
@@ -122,6 +142,16 @@ public class UserDaoImpl implements UserDao {
 		}
 	}
 
+	public List<User> getAllUser(){
+		String sql = "SELECT * FROM user WHERE activated = ?";
+		try {
+			List<User> users = this.jdbcTemplate.query(sql, new Object[] { true }, new UserMapper());
+			return users;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	public User getUserbyUsername(String username) {
 		String sql = "SELECT * FROM user WHERE username = ?";
 		try {
